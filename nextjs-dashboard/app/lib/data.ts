@@ -100,7 +100,7 @@ export async function fetchFilteredInvoices(
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
+  // console.log(`Query Parameter: ${query}`)
   try {
     const invoices = await sql<InvoicesTable>`
       SELECT
@@ -122,6 +122,7 @@ export async function fetchFilteredInvoices(
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
+    // console.log('Query Result: ', invoices)
 
     return invoices.rows;
   } catch (error) {
@@ -134,7 +135,8 @@ export async function fetchInvoicesPages(query: string) {
   noStore();
 
   try {
-    const count = await sql`SELECT COUNT(*)
+    const count = await sql`
+    SELECT COUNT(*)
     FROM invoices
     JOIN customers ON invoices.customer_id = customers.id
     WHERE
